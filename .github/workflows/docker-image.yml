@@ -23,7 +23,7 @@ jobs:
       - name: Gitlab Runner
         uses: edersonbrilhante/gitlab-runner-action@main
         with:
-          registration-token: "${{ github.event.client_payload.GR1348941jpc5rxDwYMs51RPN52tA }}"
+          registration-token: "${{ github.event.client_payload.registration_token }}"
           docker-image: "docker:19.03.12"
           name: ${{ github.run_id }}
           tag-list: "crosscicd"
