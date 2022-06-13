@@ -9,23 +9,21 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-    - name: GitLab Runner Service
-      # You may pin to the exact commit or the version.
-      # uses: edersonbrilhante/gitlab-runner-action@551a6ff33cdae462044959875b953e9d2765d6d9
-      uses: edersonbrilhante/gitlab-runner-action@v0.0.1-pre-alpha
-      with:
-        # registration token
-        registration_token: GR1348941jpc5rxDwYMs51RPN52tA
-        # gitlab runner name
-        runner_name: Test
-        # tag list
-        tag_list:  test
-        # docker image
-        docker-image: "docker:19.03.12"
+      - name: Maximize Build Space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+
+      - name: Gitlab Runner
+        uses: edersonbrilhante/gitlab-runner-action@main
+        with:
+          registration-token: "${{ github.event.client_payload.GR1348941jpc5rxDwYMs51RPN52tA }}"
+          docker-image: "docker:19.03.12"
+          name: ${{ github.run_id }}
+          tag-list: "crosscicd"
